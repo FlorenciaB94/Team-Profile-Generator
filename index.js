@@ -103,19 +103,29 @@ function createEmployee() {
         },
         {
             type: "list",
-            name: "add",
+            name: "yesAdd",
             message: "Would you like to add a new employee?",
             default: "false",
 
         },
     ])
         .then(addNewEmployees => {
-            const { employeeRole, employeeName, employeeID, GitHub, education, employeeEmail } = addNewEmployees;
-            const employee = new Employee(name, ID, email,)
-            newTeam.push(employee)
+            const { employeeName, employeeID, GitHub, education, employeeEmail, add } = addNewEmployees;
+            if (role === "Engineer") {
+                const employee = new Employee(employeeName, employeeID, GitHub, employeeEmail, add)
+                newTeam.push(employee)
+
+            } else if (role === "Intern") {
+                const employee = new Employee(employeeName, employeeID, education, employeeEmail, add)
+                newTeam.push(employee)
+            } if (yesAdd) {
+                return createEmployee(newTeam);
+            } else {
+                return newTeam;
+            }
             // addNewEmployees();
-            console.log(employee);
 
         });
+    console.log(employee);
 }
 createEmployee();
