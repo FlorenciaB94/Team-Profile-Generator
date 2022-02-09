@@ -6,8 +6,9 @@ const generateHTML = require('./src/generateHTML.js');
 const Engineer = require('./lib/Engineer');
 const Intern = require('./lib/Intern');
 const Manager = require('./lib/Manager');
+const { create } = require('domain');
 
-// Answers to questions
+// New team array
 const newTeam = [];
 
 
@@ -19,7 +20,6 @@ function createManager() {
             name: 'managerName',
             message: "Please add a team manager",
             validate: managerName => /[a-z1-9]/.test(managerName)
-
         },
         {
             type: "input",
@@ -44,32 +44,78 @@ function createManager() {
         },
 
     ])
-        .then(function (data) {
-            const managerName = data.name
-            const managerID = data.ID
-            const managerEmail = data.email
-            const officeNum = data.officeNumber
-            const newEmployee = new Manager(managerName, managerID, managerEmail, officeNum)
-            newTeam.push(newEmployee)
-            addNewEmployee();
+
+        .then(addNewEmployees => {
+            const { managerName, managerID, managerEmail, officeNum } = addNewEmployees;
+            const mgmt = new Manager(managerName, managerID, managerEmail, officeNum)
+            newTeam.push(mgmt)
+            // addNewEmployees();
+            console.log(mgmt);
 
         });
-    console.log(newTeam);
 }
 createManager();
+
+console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+console.log(newTeam);
+
 // Adding employees to team
-// const createEmployee = () => {
-//     return inquirer.prompt([
-//         {
-//             type: "list",
-//             name: 'newEmployee',
-//             message: "Do you want to add a new employee for the team?",
-//             choices: ["yes", "no"],
-//         }
-//     ])
-//         .then(answers => {
-//             console.info("Answer:", answers.newEmployee);
+function createEmployee() {
+    inquirer.prompt([
+        {
+            type: "list",
+            name: 'employeeRole',
+            message: "Please select a role",
+            choices: ["Intern", "Engineer"]
+        },
+        {
+            type: "input",
+            name: 'employeeName',
+            message: "What is the employee's name?",
+            validate: employeeName => /[a-z1-9]/.test(employeeName)
+        },
+        {
+            type: "input",
+            name: "employeeID",
+            message: "What is the employee's ID?",
+            validate: employeeID => /^[0-9]+$/.test(employeeID)
 
-//         });
+        },
+        {
+            type: "input",
+            name: "GitHub",
+            message: "What is this employee's GitHub username?",
+            when: (input) => input.employeeRole === "Engineer",
+            validate: GitHub => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(GitHub)
+        },
+        {
+            type: "input",
+            name: "education",
+            message: "What school is this intern attending?",
+            when: (input) => input.employeeRole === "Intern",
+            validate: education => /[a-z1-9]/.test(education)
+        },
+        {
+            type: "input",
+            name: "employeeEmail",
+            message: "What is the employee's email?",
+            validate: employeeEmail => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(employeeEmail)
+        },
+        {
+            type: "list",
+            name: "add",
+            message: "Would you like to add a new employee?",
+            default: "false",
 
+        },
+    ])
+        .then(addNewEmployees => {
+            const { employeeRole, employeeName, employeeID, GitHub, education, employeeEmail } = addNewEmployees;
+            const employee = new Employee(name, ID, email,)
+            newTeam.push(employee)
+            // addNewEmployees();
+            console.log(employee);
 
+        });
+}
+createEmployee();
