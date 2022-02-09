@@ -12,108 +12,64 @@ const newTeam = [];
 
 
 // Initialize app + Inquirer
-const createManager = () => {
-    return inquirer.prompt([
+function createManager() {
+    inquirer.prompt([
         {
             type: "input",
-            name: 'manager name',
-            message: "Who is this team's Manager?",
-            validate: val => /[a-z1-9]/.test(val),
-        }
-    ])
-        .then(val => {
-            const managerName = this.name(val);
-            if (managerName) {
-                console.log("Manager name created");
-            } else {
-                console.log("Please use letters only for Manager's name");
-            }
+            name: 'managerName',
+            message: "Please add a team manager",
+            validate: managerName => /[a-z1-9]/.test(managerName)
 
-        })
-
-
-        .prompt([
-
-            {
-                type: "input",
-                name: "ID",
-                message: "What is the manager's ID?",
-                validate: val => /^[0-9]+$/.test(val),
-            }
-        ])
-        .then(val => {
-            const managerID = this.ID(val);
-            if (managerID) {
-                console.log("Manager ID created");
-            } else {
-                console.log("Please enter a valid number");
-            }
-        })
-        .prompt([
-            {
-                type: "input",
-                name: "email",
-                message: "What is the manager's email?",
-                validate: val => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(val),
-            }
-        ])
-        .then(val => {
-            const managerEmail = this.email(val);
-            if (managerEmail) {
-                console.log("Manager email created");
-            } else {
-                console.log("Please enter a valid email address");
-            }
-        })
-        .prompt([
-            {
-                type: "input",
-                name: "office number",
-                message: "What is the manager's office number?",
-                validate: val => /^[0-9]+$/.test(val),
-
-            }
-        ])
-        .then(val => {
-            const officeNum = this.officeNum(val);
-            if (managerOfficeNum) {
-                console.log("Manager office number created");
-            } else {
-                console.log("Please enter a valid office number");
-            }
-        })
-        .prompt([
-            {
-                type: "message",
-                name: "success message",
-                message: "Manager successfully created",
-            }
-        ])
-        .then(managerInfo => {
-            const { name, ID, email, officeNum } = managerInfo;
-            const manager = new Manager(name, id, email, officeNum);
-            newTeam.push(manager);
-            console.log(manager);
-        }
-        );
-
-}
-createManager();
-
-//Adding employees to team
-const createEmployee = () => {
-    return inquirer.prompt([
+        },
         {
-            type: "list",
-            name: 'newEmployee',
-            message: "Do you want to add a new employee for the team?",
-            choices: ["yes", "no"],
-        }
+            type: "input",
+            name: "managerID",
+            message: "What is the manager's ID?",
+            validate: managerID => /^[0-9]+$/.test(managerID)
+
+        },
+        {
+            type: "input",
+            name: "managerEmail",
+            message: "What is the manager's email?",
+            validate: managerEmail => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(managerEmail)
+
+        },
+        {
+            type: "input",
+            name: "officeNum",
+            message: "What is the manager's office number?",
+            validate: officeNum => /^[0-9]+$/.test(officeNum)
+
+        },
+
     ])
-        .then(answers => {
-            console.info("Answer:", answers.newEmployee);
+        .then(function (data) {
+            const managerName = data.name
+            const managerID = data.ID
+            const managerEmail = data.email
+            const officeNum = data.officeNumber
+            const newEmployee = new Manager(managerName, managerID, managerEmail, officeNum)
+            newTeam.push(newEmployee)
+            addNewEmployee();
 
         });
-
+    console.log(newTeam);
 }
-createEmployee();
+createManager();
+// Adding employees to team
+// const createEmployee = () => {
+//     return inquirer.prompt([
+//         {
+//             type: "list",
+//             name: 'newEmployee',
+//             message: "Do you want to add a new employee for the team?",
+//             choices: ["yes", "no"],
+//         }
+//     ])
+//         .then(answers => {
+//             console.info("Answer:", answers.newEmployee);
+
+//         });
+
+
