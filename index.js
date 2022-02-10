@@ -6,7 +6,6 @@ const generateHTML = require('./src/generateHTML.js');
 const Engineer = require('./lib/Engineer');
 const Intern = require('./lib/Intern');
 const Manager = require('./lib/Manager');
-const { create } = require('domain');
 
 // New team array
 const newTeam = [];
@@ -14,7 +13,7 @@ const newTeam = [];
 
 // Initialize app + Inquirer
 function createManager() {
-    inquirer.prompt([
+    return inquirer.prompt([
         {
             type: "input",
             name: 'managerName',
@@ -52,16 +51,19 @@ function createManager() {
             // addNewEmployees();
             console.log(mgmt);
 
-        });
-}
-createManager();
+        })
+};
+// createManager();
+createManager()
+    .then(createEmployee)
+
 
 console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 console.log(newTeam);
 
 // Adding employees to team
 function createEmployee() {
-    inquirer.prompt([
+    return inquirer.prompt([
         {
             type: "list",
             name: 'employeeRole',
@@ -101,31 +103,75 @@ function createEmployee() {
             message: "What is the employee's email?",
             validate: employeeEmail => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(employeeEmail)
         },
+        // {
+        //     type: "list",
+        //     name: "yesAdd",
+        //     message: "Would you like to add a new employee?",
+        //     default: "false",
+
+        // },
+        // {
+        //     type: "input",
+        //     name: "GitHub",
+        //     message: "What is this employee's GitHub username?",
+        //     when: (input) => input.employeeRole === "Engineer",
+        //     validate: GitHub => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(GitHub)
+        // },
+        // {
+        //     type: "input",
+        //     name: "education",
+        //     message: "What school is this intern attending?",
+        //     when: (input) => input.employeeRole === "Intern",
+        //     validate: education => /[a-z1-9]/.test(education)
+        // },
         {
-            type: "list",
+            type: "confirm",
             name: "yesAdd",
             message: "Would you like to add a new employee?",
-            default: "false",
+            default: true,
 
         },
     ])
         .then(addNewEmployees => {
-            const { employeeName, employeeID, GitHub, education, employeeEmail, add } = addNewEmployees;
+            var { employeeName, employeeID, GitHub, education, employeeEmail } = addNewEmployees;
+            var employee;
             if (role === "Engineer") {
-                const employee = new Employee(employeeName, employeeID, GitHub, employeeEmail, add)
+                var employee = new Engineer(employeeName, employeeID, GitHub, employeeEmail)
                 newTeam.push(employee)
 
             } else if (role === "Intern") {
-                const employee = new Employee(employeeName, employeeID, education, employeeEmail, add)
+                var employee = new Intern(employeeName, employeeID, education, employeeEmail)
                 newTeam.push(employee)
             } if (yesAdd) {
                 return createEmployee(newTeam);
             } else {
                 return newTeam;
             }
-            // addNewEmployees();
 
-        });
+        })
     console.log(employee);
-}
-createEmployee();
+};
+addNewEmployees();
+// createEmployee();
+
+// const writeFile = data => {
+//     fs.writeFile("./dist/index.html", data, error => {
+//         if (error) {
+//             console.log(error);
+//         } else {
+//             console.log("Your new team has been created")
+//         }
+//     })
+// };
+
+// createManager()
+//     .then(createEmployee)
+    // .then(newTeam => {
+    //     return generateHTML(newTeam);
+    // })
+    // .then(displayHTML => {
+    //     return writeFile(displayHTML);
+    // })
+    // .catch(error => {
+    //     console.log(error);
+    // });
