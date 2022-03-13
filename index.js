@@ -17,27 +17,27 @@ function createManager() {
         {
             type: "input",
             name: 'managerName',
-            message: "Please add a team manager",
+            message: "Please add a team manager: ",
             validate: managerName => /[a-z1-9]/.test(managerName)
         },
         {
             type: "input",
             name: "managerID",
-            message: "What is the manager's ID?",
+            message: "What is the manager's ID? ",
             validate: managerID => /^[0-9]+$/.test(managerID)
 
         },
         {
             type: "input",
             name: "managerEmail",
-            message: "What is the manager's email?",
+            message: "What is the manager's email? ",
             validate: managerEmail => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(managerEmail)
 
         },
         {
             type: "input",
             name: "officeNum",
-            message: "What is the manager's office number?",
+            message: "What is the manager's office number? ",
             validate: officeNum => /^[0-9]+$/.test(officeNum)
 
         },
@@ -53,10 +53,9 @@ function createManager() {
 
         })
 };
-// createManager();
+
 createManager()
     .then(createEmployee)
-
 
 console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 console.log(newTeam);
@@ -67,92 +66,72 @@ function createEmployee() {
         {
             type: "list",
             name: 'employeeRole',
-            message: "Please select a role",
+            message: "Please select a role: ",
             choices: ["Intern", "Engineer"]
         },
         {
             type: "input",
             name: 'employeeName',
-            message: "What is the employee's name?",
+            message: "What is the employee's name? ",
             validate: employeeName => /[a-z1-9]/.test(employeeName)
         },
         {
             type: "input",
             name: "employeeID",
-            message: "What is the employee's ID?",
+            message: "What is the employee's ID? ",
             validate: employeeID => /^[0-9]+$/.test(employeeID)
 
         },
         {
             type: "input",
             name: "GitHub",
-            message: "What is this employee's GitHub username?",
+            message: "What is this employee's GitHub username? ",
             when: (input) => input.employeeRole === "Engineer",
             validate: GitHub => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(GitHub)
         },
         {
             type: "input",
             name: "education",
-            message: "What school is this intern attending?",
+            message: "What school is this intern attending? ",
             when: (input) => input.employeeRole === "Intern",
             validate: education => /[a-z1-9]/.test(education)
         },
         {
             type: "input",
             name: "employeeEmail",
-            message: "What is the employee's email?",
+            message: "What is the employee's email? ",
             validate: employeeEmail => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(employeeEmail)
         },
-        // {
-        //     type: "list",
-        //     name: "yesAdd",
-        //     message: "Would you like to add a new employee?",
-        //     default: "false",
-
-        // },
-        // {
-        //     type: "input",
-        //     name: "GitHub",
-        //     message: "What is this employee's GitHub username?",
-        //     when: (input) => input.employeeRole === "Engineer",
-        //     validate: GitHub => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(GitHub)
-        // },
-        // {
-        //     type: "input",
-        //     name: "education",
-        //     message: "What school is this intern attending?",
-        //     when: (input) => input.employeeRole === "Intern",
-        //     validate: education => /[a-z1-9]/.test(education)
-        // },
         {
             type: "confirm",
             name: "yesAdd",
-            message: "Would you like to add a new employee?",
+            message: "Would you like to add a new employee? ",
             default: true,
 
         },
+
     ])
         .then(addNewEmployees => {
             var { employeeName, employeeID, GitHub, education, employeeEmail } = addNewEmployees;
             var employee;
-            if (role === "Engineer") {
+            if (employeeRole === "Engineer") {
                 var employee = new Engineer(employeeName, employeeID, GitHub, employeeEmail)
                 newTeam.push(employee)
 
-            } else if (role === "Intern") {
+
+            } else if (employeeRole === "Intern") {
                 var employee = new Intern(employeeName, employeeID, education, employeeEmail)
                 newTeam.push(employee)
             } if (yesAdd) {
                 return createEmployee(newTeam);
             } else {
                 return newTeam;
-            }
+            };
 
         })
-    console.log(employee);
 };
-addNewEmployees();
 // createEmployee();
+
 
 // const writeFile = data => {
 //     fs.writeFile("./dist/index.html", data, error => {
